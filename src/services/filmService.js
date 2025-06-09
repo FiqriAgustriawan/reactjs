@@ -13,9 +13,15 @@ export const filmService = {
     return response.data;
   },
 
-  // Get single film by slug
+  // Get single film by slug (untuk public)
   getFilm: async (slug) => {
     const response = await api.get(`/films/${slug}`);
+    return response.data;
+  },
+
+  // Get single film by ID (untuk admin)
+  getFilmById: async (id) => {
+    const response = await api.get(`/admin/films/${id}`);
     return response.data;
   },
 

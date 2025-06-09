@@ -1,14 +1,20 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useInView } from 'react-intersection-observer';
-import { filmService } from '../services/filmService';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectFade, Parallax } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
-import 'swiper/css/parallax';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
+import { filmService } from "../services/filmService";
+import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  Navigation,
+  Pagination,
+  Autoplay,
+  EffectFade,
+  Parallax,
+} from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
+import "swiper/css/parallax";
 import {
   PlayIcon,
   ClockIcon,
@@ -30,9 +36,9 @@ import {
   HeartIcon,
   ShareIcon,
   BoltIcon,
-  SparklesIcon
-} from '@heroicons/react/24/outline';
-import { motion, AnimatePresence } from 'framer-motion';
+  SparklesIcon,
+} from "@heroicons/react/24/outline";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Floating particles background
 const FloatingParticles = () => {
@@ -68,7 +74,7 @@ const TopBanner = ({ onClose }) => {
   const promos = [
     "🎉 GRAND OPENING! Diskon 50% untuk 100 pembeli pertama!",
     "🍿 Paket Hemat! Beli 2 tiket + popcorn mulai 89K",
-    "💝 Weekend Special! Buy 1 Get 1 untuk couple seat"
+    "💝 Weekend Special! Buy 1 Get 1 untuk couple seat",
   ];
 
   useEffect(() => {
@@ -82,7 +88,7 @@ const TopBanner = ({ onClose }) => {
     <motion.div
       className="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 text-white py-3 overflow-hidden sticky top-16 z-40"
       initial={{ height: 0, opacity: 0 }}
-      animate={{ height: 'auto', opacity: 1 }}
+      animate={{ height: "auto", opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}
     >
       <FloatingParticles />
@@ -112,10 +118,10 @@ const TopBanner = ({ onClose }) => {
 
 // Enhanced Interactive Search Component
 const SearchOverlay = ({ isOpen, onClose }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState("all");
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -126,9 +132,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const searchTabs = [
-    { id: 'all', label: 'Semua', icon: MagnifyingGlassIcon },
-    { id: 'films', label: 'Film', icon: FilmIcon },
-    { id: 'theaters', label: 'Bioskop', icon: BuildingOfficeIcon },
+    { id: "all", label: "Semua", icon: MagnifyingGlassIcon },
+    { id: "films", label: "Film", icon: FilmIcon },
+    { id: "theaters", label: "Bioskop", icon: BuildingOfficeIcon },
   ];
 
   const handleSearch = (e) => {
@@ -137,19 +143,37 @@ const SearchOverlay = ({ isOpen, onClose }) => {
       setIsSearching(true);
       setTimeout(() => {
         const allResults = [
-          { id: 1, title: 'Ballerina', type: 'film', rating: 8.5, genre: 'Action' },
-          { id: 2, title: 'Gowes', type: 'film', rating: 7.8, genre: 'Drama' },
-          { id: 3, title: 'Cinema XXI Jakarta', type: 'theater', location: 'Jakarta' },
-          { id: 4, title: 'Cinema XXI Bandung', type: 'theater', location: 'Bandung' }
+          {
+            id: 1,
+            title: "Ballerina",
+            type: "film",
+            rating: 8.5,
+            genre: "Action",
+          },
+          { id: 2, title: "Gowes", type: "film", rating: 7.8, genre: "Drama" },
+          {
+            id: 3,
+            title: "Cinema XXI Jakarta",
+            type: "theater",
+            location: "Jakarta",
+          },
+          {
+            id: 4,
+            title: "Cinema XXI Bandung",
+            type: "theater",
+            location: "Bandung",
+          },
         ];
 
-        let filteredResults = allResults.filter(item =>
+        let filteredResults = allResults.filter((item) =>
           item.title.toLowerCase().includes(query.toLowerCase())
         );
 
-        if (activeTab !== 'all') {
-          filteredResults = filteredResults.filter(item =>
-            activeTab === 'films' ? item.type === 'film' : item.type === 'theater'
+        if (activeTab !== "all") {
+          filteredResults = filteredResults.filter((item) =>
+            activeTab === "films"
+              ? item.type === "film"
+              : item.type === "theater"
           );
         }
 
@@ -204,10 +228,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all ${activeTab === tab.id
-                      ? 'bg-sky-500 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
+                    className={`flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeTab === tab.id
+                        ? "bg-sky-500 text-white shadow-lg"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
                   >
                     <tab.icon className="h-4 w-4 mr-2" />
                     {tab.label}
@@ -223,38 +248,56 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   <motion.div
                     className="w-16 h-16 border-4 border-sky-500 border-t-transparent rounded-full mx-auto"
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   />
-                  <p className="mt-4 text-gray-500 text-lg">Mencari {activeTab === 'all' ? 'semua' : activeTab}...</p>
+                  <p className="mt-4 text-gray-500 text-lg">
+                    Mencari {activeTab === "all" ? "semua" : activeTab}...
+                  </p>
                 </div>
               ) : results.length > 0 ? (
                 <div className="p-4">
-                  {results.map(result => (
+                  {results.map((result) => (
                     <motion.div
                       key={result.id}
                       className="p-4 hover:bg-gray-50 rounded-xl cursor-pointer flex items-center transition-colors"
                       whileHover={{ x: 5 }}
                       onClick={() => {
                         onClose();
-                        navigate(result.type === 'film' ? `/films/${result.id}` : `/theaters/${result.id}`);
+                        navigate(
+                          result.type === "film"
+                            ? `/films/${result.id}`
+                            : `/theaters/${result.id}`
+                        );
                       }}
                     >
-                      <div className={`rounded-full p-3 mr-4 ${result.type === 'film' ? 'bg-sky-100' : 'bg-green-100'}`}>
-                        {result.type === 'film' ? (
+                      <div
+                        className={`rounded-full p-3 mr-4 ${
+                          result.type === "film" ? "bg-sky-100" : "bg-green-100"
+                        }`}
+                      >
+                        {result.type === "film" ? (
                           <FilmIcon className="h-6 w-6 text-sky-600" />
                         ) : (
                           <BuildingOfficeIcon className="h-6 w-6 text-green-600" />
                         )}
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-lg">{result.title}</h3>
-                        {result.type === 'film' ? (
+                        <h3 className="font-semibold text-lg">
+                          {result.title}
+                        </h3>
+                        {result.type === "film" ? (
                           <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
                             <span>⭐ {result.rating}</span>
                             <span>{result.genre}</span>
                           </div>
                         ) : (
-                          <p className="text-sm text-gray-500 mt-1">📍 {result.location}</p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            📍 {result.location}
+                          </p>
                         )}
                       </div>
                       <ArrowRightIcon className="h-5 w-5 text-gray-400" />
@@ -264,14 +307,28 @@ const SearchOverlay = ({ isOpen, onClose }) => {
               ) : query ? (
                 <div className="p-8 text-center">
                   <div className="text-6xl mb-4">🔍</div>
-                  <h3 className="text-xl font-semibold text-gray-600 mb-2">Tidak ditemukan</h3>
-                  <p className="text-gray-500">Hasil pencarian untuk "{query}" tidak ditemukan</p>
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                    Tidak ditemukan
+                  </h3>
+                  <p className="text-gray-500">
+                    Hasil pencarian untuk "{query}" tidak ditemukan
+                  </p>
                 </div>
               ) : (
                 <div className="p-6">
-                  <h4 className="font-semibold text-gray-700 mb-4">🔥 Pencarian Populer</h4>
+                  <h4 className="font-semibold text-gray-700 mb-4">
+                    🔥 Pencarian Populer
+                  </h4>
                   <div className="flex flex-wrap gap-2">
-                    {['Ballerina', 'GILS', 'Karate Kid', 'Cinema Jakarta', 'Waktu Maghrib', 'Action', 'Romance'].map((term, i) => (
+                    {[
+                      "Ballerina",
+                      "GILS",
+                      "Karate Kid",
+                      "Cinema Jakarta",
+                      "Waktu Maghrib",
+                      "Action",
+                      "Romance",
+                    ].map((term, i) => (
                       <motion.button
                         key={i}
                         className="px-4 py-2 bg-gradient-to-r from-sky-100 to-blue-100 text-sky-700 rounded-full text-sm hover:from-sky-200 hover:to-blue-200 transition-all"
@@ -294,42 +351,43 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 };
 
 // Enhanced Modern Hero Section
-const HeroSection = () => {
+const HeroSection = ({ films = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-
-  const featuredFilms = [
-    {
-      id: 'ballerina',
-      title: 'Ballerina',
-      subtitle: 'From the world of John Wick',
-      bgImage: 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3',
-      releaseDate: '6 Juni 2025',
-      genre: 'Action, Thriller',
-      rating: 8.9,
-      description: 'Spinoff dari universe John Wick yang menampilkan seorang assassin ballerina.'
-    },
-    {
-      id: 'gils',
-      title: 'GILS (Ibuku Ibu-Ibu)',
-      subtitle: 'Komedi keluarga yang menghibur',
-      bgImage: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3',
-      releaseDate: '12 Juni 2025',
-      genre: 'Comedy, Family',
-      rating: 8.1,
-      description: 'Kisah lucu tentang kehidupan sehari-hari para ibu rumah tangga modern.'
-    },
-    {
-      id: 'gowes',
-      title: 'Gowes',
-      subtitle: 'Petualangan penuh makna',
-      bgImage: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?ixlib=rb-4.0.3',
-      releaseDate: '5 Juni 2025',
-      genre: 'Adventure, Drama',
-      rating: 7.8,
-      description: 'Perjalanan spiritual melalui pesepeda yang mencari makna hidup.'
-    }
-  ];
+  const featuredFilms =
+    films.length > 0
+      ? films.slice(0, 3).map((film) => ({
+          id: film.slug || film.id, // Gunakan slug terlebih dahulu
+          title: film.judul,
+          subtitle:
+            film.deskripsi?.substring(0, 50) + "..." ||
+            "Film menarik yang wajib ditonton",
+          bgImage:
+            film.poster_url ||
+            "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3",
+          releaseDate: film.tanggal_rilis
+            ? new Date(film.tanggal_rilis).toLocaleDateString("id-ID")
+            : "2024",
+          genre: "Action, Drama",
+          rating: 8.5,
+          description:
+            film.deskripsi ||
+            "Film menarik yang menghadirkan pengalaman menonton yang tak terlupakan.",
+          slug: film.slug, 
+        }))
+      : [
+          {
+            id: "default-1",
+            title: "Cinema Terbaru",
+            subtitle: "Nikmati pengalaman menonton terbaik",
+            bgImage:
+              "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3",
+            releaseDate: "2024",
+            genre: "All Genres",
+            rating: 8.9,
+            description:
+              "Temukan koleksi film terbaik dan nikmati pengalaman menonton yang tak terlupakan.",
+          },
+        ];
 
   return (
     <section className="relative h-screen overflow-hidden">
@@ -341,12 +399,12 @@ const HeroSection = () => {
         autoplay={{
           delay: 6000,
           disableOnInteraction: false,
-          pauseOnMouseEnter: true
+          pauseOnMouseEnter: true,
         }}
         pagination={{
           clickable: true,
-          bulletClass: 'swiper-pagination-bullet !bg-white !bg-opacity-50',
-          bulletActiveClass: 'swiper-pagination-bullet-active !bg-white'
+          bulletClass: "swiper-pagination-bullet !bg-white !bg-opacity-50",
+          bulletActiveClass: "swiper-pagination-bullet-active !bg-white",
         }}
         onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
         className="absolute inset-0 w-full h-full"
@@ -358,7 +416,11 @@ const HeroSection = () => {
                 src={film.bgImage}
                 alt={film.title}
                 className="absolute inset-0 w-full h-full object-cover transform scale-105"
-                style={{ filter: 'brightness(0.7)' }}
+                style={{ filter: "brightness(0.7)" }}
+                onError={(e) => {
+                  e.target.src =
+                    "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3";
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
@@ -392,7 +454,9 @@ const HeroSection = () => {
                   </span>
                   <div className="flex items-center gap-1">
                     <StarIcon className="h-5 w-5 text-yellow-400 fill-current" />
-                    <span className="font-semibold">{featuredFilms[currentSlide].rating}</span>
+                    <span className="font-semibold">
+                      {featuredFilms[currentSlide].rating}
+                    </span>
                   </div>
                 </motion.div>
 
@@ -420,7 +484,9 @@ const HeroSection = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <span className="text-sky-400 font-medium">{featuredFilms[currentSlide].genre}</span>
+                  <span className="text-sky-400 font-medium">
+                    {featuredFilms[currentSlide].genre}
+                  </span>
                   <span className="text-gray-400">•</span>
                   <span className="text-gray-300">2024</span>
                 </motion.div>
@@ -441,7 +507,10 @@ const HeroSection = () => {
                   transition={{ delay: 0.7 }}
                 >
                   <Link
-                    to={`/films/${featuredFilms[currentSlide].id}`}
+                    to={`/films/${
+                      featuredFilms[currentSlide].slug ||
+                      featuredFilms[currentSlide].id
+                    }`} // ✅ Correct reference
                     className="group relative bg-gradient-to-r from-sky-500 to-blue-600 text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all hover:shadow-2xl hover:shadow-sky-500/25 overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center justify-center">
@@ -457,7 +526,12 @@ const HeroSection = () => {
                   </Link>
 
                   <button
-                    onClick={() => window.open(`https://www.youtube.com/results?search_query=${featuredFilms[currentSlide].title}+trailer`, '_blank')}
+                    onClick={() =>
+                      window.open(
+                        `https://www.youtube.com/results?search_query=${featuredFilms[currentSlide].title}+trailer`,
+                        "_blank"
+                      )
+                    }
                     className="group border-2 border-white text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all hover:bg-white hover:text-gray-900 flex items-center justify-center"
                   >
                     <PlayIcon className="h-6 w-6 mr-3" />
@@ -485,6 +559,10 @@ const HeroSection = () => {
                       src={featuredFilms[currentSlide].bgImage}
                       alt={featuredFilms[currentSlide].title}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src =
+                          "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3";
+                      }}
                     />
                   </div>
                 </motion.div>
@@ -554,31 +632,31 @@ const QuickNavSection = () => {
   const navItems = [
     {
       icon: FilmIcon,
-      label: 'Semua Film',
-      description: 'Jelajahi koleksi film terlengkap',
-      color: 'from-sky-400 to-blue-500',
-      to: '/films'
+      label: "Semua Film",
+      description: "Jelajahi koleksi film terlengkap",
+      color: "from-sky-400 to-blue-500",
+      to: "/films",
     },
     {
       icon: BoltIcon,
-      label: 'Now Playing',
-      description: 'Film yang sedang tayang',
-      color: 'from-yellow-400 to-orange-500',
-      to: '/now-playing'
+      label: "Now Playing",
+      description: "Film yang sedang tayang",
+      color: "from-yellow-400 to-orange-500",
+      to: "/now-playing",
     },
     {
       icon: SparklesIcon,
-      label: 'Coming Soon',
-      description: 'Film yang akan datang',
-      color: 'from-purple-400 to-pink-500',
-      to: '/coming-soon'
+      label: "Coming Soon",
+      description: "Film yang akan datang",
+      color: "from-purple-400 to-pink-500",
+      to: "/coming-soon",
     },
     {
       icon: ShoppingBagIcon,
-      label: 'Promo',
-      description: 'Penawaran dan diskon menarik',
-      color: 'from-green-400 to-emerald-500',
-      to: '/promo'
+      label: "Promo",
+      description: "Penawaran dan diskon menarik",
+      color: "from-green-400 to-emerald-500",
+      to: "/promo",
     },
   ];
 
@@ -592,9 +670,12 @@ const QuickNavSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Jelajahi Cinema</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Jelajahi Cinema
+          </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Temukan pengalaman menonton yang tak terlupakan dengan koleksi film terbaik
+            Temukan pengalaman menonton yang tak terlupakan dengan koleksi film
+            terbaik
           </p>
         </motion.div>
 
@@ -622,9 +703,7 @@ const QuickNavSection = () => {
                 <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-sky-600 transition-colors">
                   {item.label}
                 </h3>
-                <p className="text-gray-600 text-sm">
-                  {item.description}
-                </p>
+                <p className="text-gray-600 text-sm">{item.description}</p>
               </Link>
             </motion.div>
           ))}
@@ -640,7 +719,7 @@ const MovieCard = ({ film, index, featured = false }) => {
   const [isLiked, setIsLiked] = useState(false);
   const { ref, inView } = useInView({
     threshold: 0.2,
-    triggerOnce: true
+    triggerOnce: true,
   });
 
   return (
@@ -655,11 +734,15 @@ const MovieCard = ({ film, index, featured = false }) => {
       {/* Poster Image - Fixed aspect ratio */}
       <div className="relative aspect-[2/3] overflow-hidden">
         <img
-          src={film?.poster_url || 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3'}
-          alt={film?.judul || 'Movie'}
+          src={
+            film?.poster_url ||
+            "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3"
+          }
+          alt={film?.judul || "Movie"}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           onError={(e) => {
-            e.target.src = 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3';
+            e.target.src =
+              "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3";
           }}
         />
 
@@ -671,10 +754,15 @@ const MovieCard = ({ film, index, featured = false }) => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsLiked(!isLiked)}
-                className={`p-3 rounded-full backdrop-blur-md transition-colors ${isLiked ? 'bg-red-500 text-white' : 'bg-white bg-opacity-20 text-white'
-                  }`}
+                className={`p-3 rounded-full backdrop-blur-md transition-colors ${
+                  isLiked
+                    ? "bg-red-500 text-white"
+                    : "bg-white bg-opacity-20 text-white"
+                }`}
               >
-                <HeartIcon className={`h-5 w-5 ${isLiked ? 'fill-current' : ''}`} />
+                <HeartIcon
+                  className={`h-5 w-5 ${isLiked ? "fill-current" : ""}`}
+                />
               </motion.button>
 
               <motion.button
@@ -687,7 +775,9 @@ const MovieCard = ({ film, index, featured = false }) => {
               </motion.button>
 
               <Link
-                to={`/films/${film?.slug || film?.judul?.toLowerCase().replace(/\s+/g, '-')}`}
+                to={`/films/${
+                  film?.slug || film?.judul?.toLowerCase().replace(/\s+/g, "-")
+                }`}
                 className="flex-1 bg-gradient-to-r from-sky-500 to-blue-600 text-white py-3 rounded-full text-center font-semibold backdrop-blur-md hover:from-sky-600 hover:to-blue-700 transition-all"
               >
                 Beli Tiket
@@ -698,11 +788,14 @@ const MovieCard = ({ film, index, featured = false }) => {
 
         {/* Status Badge */}
         <div className="absolute top-4 right-4">
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${film?.is_active
-            ? 'bg-green-500 text-white'
-            : 'bg-gray-500 text-white'
-            }`}>
-            {film?.is_active ? 'Now Playing' : 'Coming Soon'}
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+              film?.is_active
+                ? "bg-green-500 text-white"
+                : "bg-gray-500 text-white"
+            }`}
+          >
+            {film?.is_active ? "Now Playing" : "Coming Soon"}
           </span>
         </div>
 
@@ -719,22 +812,24 @@ const MovieCard = ({ film, index, featured = false }) => {
       <div className="p-6 h-50 flex flex-col justify-between">
         <div>
           <h3 className="font-bold text-xl text-gray-900 mb-2 line-clamp-2 group-hover:text-sky-600 transition-colors min-h-[3.5rem]">
-            {film?.judul || 'Untitled Movie'}
+            {film?.judul || "Untitled Movie"}
           </h3>
 
           <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
             <div className="flex items-center gap-1">
               <ClockIcon className="h-4 w-4" />
-              <span>{film?.durasi || '120'} min</span>
+              <span>{film?.durasi || "120"} min</span>
             </div>
             <div className="text-sky-600 font-medium text-xs">
-              {film?.genre || 'Drama'}
+              {film?.genre || "Drama"}
             </div>
           </div>
         </div>
 
         <Link
-          to={`/films/${film?.slug || film?.judul?.toLowerCase().replace(/\s+/g, '-')}`}
+          to={`/films/${
+            film?.slug || film?.judul?.toLowerCase().replace(/\s+/g, "-")
+          }`}
           className="w-full bg-gradient-to-r from-sky-500 to-blue-600 text-white text-center py-3 rounded-2xl font-semibold hover:from-sky-600 hover:to-blue-700 transition-all"
         >
           Detail Film
@@ -756,11 +851,14 @@ const MovieCard = ({ film, index, featured = false }) => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="relative h-64">
                 <img
-                  src={film?.poster_url || 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3'}
+                  src={
+                    film?.poster_url ||
+                    "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3"
+                  }
                   alt={film?.judul}
                   className="w-full h-full object-cover"
                 />
@@ -782,7 +880,7 @@ const MovieCard = ({ film, index, featured = false }) => {
                   </div>
                   <div className="flex items-center gap-2 text-gray-600">
                     <ClockIcon className="h-5 w-5" />
-                    <span>{film?.durasi || '120'} min</span>
+                    <span>{film?.durasi || "120"} min</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-600">
                     <CalendarDaysIcon className="h-5 w-5" />
@@ -791,19 +889,25 @@ const MovieCard = ({ film, index, featured = false }) => {
                 </div>
 
                 <p className="text-gray-600 mb-6 leading-relaxed">
-                  {film?.deskripsi || 'Film menarik yang menghadirkan pengalaman menonton yang tak terlupakan dengan cerita yang memikat dan visual yang memukau.'}
+                  {film?.deskripsi ||
+                    "Film menarik yang menghadirkan pengalaman menonton yang tak terlupakan dengan cerita yang memikat dan visual yang memukau."}
                 </p>
 
                 <div className="flex gap-4">
                   <Link
-                    to={`/films/${film?.slug || film?.judul?.toLowerCase().replace(/\s+/g, '-')}`}
+                    to={`/films/${film?.slug || film?.id}`} // Gunakan slug terlebih dahulu
                     className="flex-1 bg-gradient-to-r from-sky-500 to-blue-600 text-white text-center py-4 rounded-2xl font-semibold hover:from-sky-600 hover:to-blue-700 transition-all"
                   >
                     Beli Tiket Sekarang
                   </Link>
                   <button
                     className="bg-gray-200 text-gray-800 px-6 py-4 rounded-2xl font-semibold hover:bg-gray-300 transition-colors"
-                    onClick={() => window.open(`https://www.youtube.com/results?search_query=${film?.judul}+trailer`, '_blank')}
+                    onClick={() =>
+                      window.open(
+                        `https://www.youtube.com/results?search_query=${film?.judul}+trailer`,
+                        "_blank"
+                      )
+                    }
                   >
                     Trailer
                   </button>
@@ -817,34 +921,38 @@ const MovieCard = ({ film, index, featured = false }) => {
   );
 };
 
-// Main Home Component - Update layout untuk sticky banner
+// Main Home Component - Update to match AdminFilms pattern
 const Home = () => {
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [pagination, setPagination] = useState(null);
   const [showBanner, setShowBanner] = useState(true);
 
-  // Fetch films with memoization
+  // Fetch films using the same pattern as AdminFilms.js
   const fetchFilms = useCallback(async () => {
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await filmService.getFilms();
+      const response = await filmService.getAllFilms(); // Use getAllFilms like in AdminFilms
 
       let filmsData = [];
       let paginationData = null;
 
-      if (response && typeof response === 'object') {
+      if (response && typeof response === "object") {
         if (response.data && Array.isArray(response.data)) {
           filmsData = response.data;
-          paginationData = {
-            current_page: response.current_page,
-            last_page: response.last_page,
-            per_page: response.per_page,
-            total: response.total
-          };
+          if (response.meta && response.meta.pagination) {
+            paginationData = response.meta.pagination;
+          } else {
+            paginationData = {
+              current_page: response.current_page,
+              last_page: response.last_page,
+              per_page: response.per_page,
+              total: response.total,
+            };
+          }
         } else if (Array.isArray(response)) {
           filmsData = response;
         } else if (response.data) {
@@ -857,8 +965,12 @@ const Home = () => {
       setFilms(filmsData);
       setPagination(paginationData);
     } catch (error) {
-      setError('Failed to fetch films');
+      setError(
+        "Failed to fetch films: " +
+          (error.response?.data?.message || error.message)
+      );
       setFilms([]);
+      console.error("Error fetching films:", error);
     } finally {
       setLoading(false);
     }
@@ -887,9 +999,9 @@ const Home = () => {
         {showBanner && <TopBanner onClose={() => setShowBanner(false)} />}
       </AnimatePresence>
 
-      {/* Hero Section - Adjust top margin when banner is visible */}
-      <div className={`${showBanner ? '' : ''}`}>
-        <HeroSection />
+      {/* Hero Section - Pass films data to hero */}
+      <div className={`${showBanner ? "" : ""}`}>
+        <HeroSection films={films} />
       </div>
 
       {/* Quick Navigation */}
@@ -904,7 +1016,9 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Sedang Tayang</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Sedang Tayang
+            </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Jangan lewatkan film-film terbaru yang sedang trending di bioskop
             </p>
@@ -923,7 +1037,9 @@ const Home = () => {
               animate={{ opacity: 1 }}
             >
               <div className="text-6xl mb-6">🎬</div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Oops! Terjadi Kesalahan</h3>
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                Oops! Terjadi Kesalahan
+              </h3>
               <p className="text-gray-600 mb-8">{error}</p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -941,8 +1057,12 @@ const Home = () => {
               animate={{ opacity: 1 }}
             >
               <div className="text-6xl mb-6">🎭</div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Belum Ada Film</h3>
-              <p className="text-gray-600">Film akan segera hadir. Nantikan update terbaru!</p>
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                Belum Ada Film
+              </h3>
+              <p className="text-gray-600">
+                Film akan segera hadir. Nantikan update terbaru!
+              </p>
             </motion.div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
@@ -983,8 +1103,13 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Promo Spesial</h2>
-            <p className="text-xl text-gray-600">Dapatkan penawaran menarik untuk pengalaman menonton yang lebih hemat</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Promo Spesial
+            </h2>
+            <p className="text-xl text-gray-600">
+              Dapatkan penawaran menarik untuk pengalaman menonton yang lebih
+              hemat
+            </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -993,20 +1118,20 @@ const Home = () => {
                 title: "Weekend Special",
                 description: "Diskon 30% untuk tiket weekend",
                 color: "from-purple-500 to-pink-500",
-                icon: SparklesIcon
+                icon: SparklesIcon,
               },
               {
                 title: "Student Discount",
                 description: "Potongan 25% untuk mahasiswa",
                 color: "from-green-500 to-emerald-500",
-                icon: FireIcon
+                icon: FireIcon,
               },
               {
                 title: "Family Package",
                 description: "Beli 3 tiket gratis 1 popcorn",
                 color: "from-orange-500 to-red-500",
-                icon: BoltIcon
-              }
+                icon: BoltIcon,
+              },
             ].map((promo, index) => (
               <motion.div
                 key={promo.title}

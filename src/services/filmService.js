@@ -1,65 +1,48 @@
-import api from './api';
+import api from "./api";
 
 export const filmService = {
-  async getFilms() {
-    const response = await api.get('/films');
+  // Get all films (public - active films only)
+  getAllFilms: async (page = 1) => {
+    const response = await api.get(`/films?page=${page}`);
     return response.data;
   },
 
-  async getFilm(slug) {
+  // Get all films for admin (including inactive)
+  getAllFilmsAdmin: async (page = 1) => {
+    const response = await api.get(`/admin/films?page=${page}`);
+    return response.data;
+  },
+
+  // Get single film by slug
+  getFilm: async (slug) => {
     const response = await api.get(`/films/${slug}`);
     return response.data;
   },
 
-  async getFilmBySlug(slug) {
-    const response = await api.get(`/films/${slug}`);
-    return response.data;
-  },
-
-  async getAllFilms() {
-    const response = await api.get('/admin/films');
-    return response.data;
-  },
-
-  async createFilm(filmData) {
-    // Konversi FormData jika ada file
-    const formData = new FormData();
-
-    Object.keys(filmData).forEach(key => {
-      if (filmData[key] !== null && filmData[key] !== undefined) {
-        formData.append(key, filmData[key]);
-      }
-    });
-
-    const response = await api.post('/films', formData, {
+  // Create new film
+  createFilm: async (formData) => {
+    const response = await api.post("/admin/films", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;
   },
 
-  async updateFilm(slug, filmData) {
-    // Konversi FormData jika ada file
-    const formData = new FormData();
-    formData.append('_method', 'PUT'); // Laravel method spoofing
-
-    Object.keys(filmData).forEach(key => {
-      if (filmData[key] !== null && filmData[key] !== undefined) {
-        formData.append(key, filmData[key]);
-      }
-    });
-
-    const response = await api.post(`/films/${slug}`, formData, {
+  // Update film
+  updateFilm: async (id, formData) => {
+    const response = await api.post(`/admin/films/${id}`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
+        "X-HTTP-Method-Override": "PUT",
       },
     });
     return response.data;
   },
 
-  async deleteFilm(slug) {
-    const response = await api.delete(`/films/${slug}`);
+  // Delete film
+  deleteFilm: async (id) => {
+    const response = await api.delete(`/admin/films/${id}`);
     return response.data;
-  }
+  },
 };

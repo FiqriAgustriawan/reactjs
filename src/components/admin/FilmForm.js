@@ -67,7 +67,12 @@ const FilmForm = ({ isOpen, onClose, onSubmit, initialData = null }) => {
       submitData.append("deskripsi", formData.deskripsi);
       submitData.append("harga_tiket", formData.harga_tiket);
       submitData.append("tanggal_rilis", formData.tanggal_rilis);
-      submitData.append("durasi", formData.durasi);
+
+      // PERBAIKAN: Pastikan durasi dikirim sebagai integer
+      if (formData.durasi) {
+        submitData.append("durasi", parseInt(formData.durasi, 10));
+      }
+
       submitData.append("is_active", formData.is_active ? "1" : "0");
 
       // Append poster file if selected

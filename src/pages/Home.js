@@ -3,13 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { filmService } from "../services/filmService";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Navigation,
-  Pagination,
-  Autoplay,
-  EffectFade,
-  Parallax,
-} from "swiper/modules";
+import { Pagination, Autoplay, EffectFade, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -18,11 +12,8 @@ import "swiper/css/parallax";
 import {
   PlayIcon,
   ClockIcon,
-  CurrencyDollarIcon,
   StarIcon,
-  MapPinIcon,
   MagnifyingGlassIcon,
-  ChevronRightIcon,
   TicketIcon,
   FilmIcon,
   ShoppingBagIcon,
@@ -30,15 +21,20 @@ import {
   XMarkIcon,
   CalendarDaysIcon,
   ArrowRightIcon,
-  PlusIcon,
   FireIcon,
   EyeIcon,
   HeartIcon,
   ShareIcon,
   BoltIcon,
   SparklesIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Import banner images
+import banner1 from "../assets/image/banner1.jpg";
+import banner2 from "../assets/image/banner2.jpg";
 
 // Floating particles background
 const FloatingParticles = () => {
@@ -353,10 +349,38 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 // Enhanced Modern Hero Section
 const HeroSection = ({ films = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const featuredFilms =
+
+  const desktopBanners = [
+    {
+      id: "banner-1",
+      title: "Selamat Datang di CinemaXXI",
+      subtitle: "Nikmati pengalaman menonton terbaik di bioskop modern",
+      bgImage: banner1,
+      releaseDate: "2024",
+      genre: "Premium Experience",
+      rating: 9.5,
+      description:
+        "Rasakan sensasi menonton film dengan teknologi terdepan dan kenyamanan maksimal di CinemaXXI.",
+      slug: "cinemaXXI-experience",
+    },
+    {
+      id: "banner-2",
+      title: "Film Terbaru & Terpopuler",
+      subtitle: "Jangan lewatkan film-film blockbuster terbaru",
+      bgImage: banner2,
+      releaseDate: "2024",
+      genre: "Latest Movies",
+      rating: 9.0,
+      description:
+        "Saksikan film-film terbaru dan terpopuler dengan kualitas audio visual terbaik hanya di CinemaXXI.",
+      slug: "latest-movies",
+    },
+  ];
+
+  const mobileFilms =
     films.length > 0
       ? films.slice(0, 3).map((film) => ({
-          id: film.slug || film.id, // Gunakan slug terlebih dahulu
+          id: film.slug || film.id,
           title: film.judul,
           subtitle:
             film.deskripsi?.substring(0, 50) + "..." ||
@@ -372,25 +396,26 @@ const HeroSection = ({ films = [] }) => {
           description:
             film.deskripsi ||
             "Film menarik yang menghadirkan pengalaman menonton yang tak terlupakan.",
-          slug: film.slug, 
+          slug: film.slug,
         }))
-      : [
-          {
-            id: "default-1",
-            title: "Cinema Terbaru",
-            subtitle: "Nikmati pengalaman menonton terbaik",
-            bgImage:
-              "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3",
-            releaseDate: "2024",
-            genre: "All Genres",
-            rating: 8.9,
-            description:
-              "Temukan koleksi film terbaik dan nikmati pengalaman menonton yang tak terlupakan.",
-          },
-        ];
+      : desktopBanners;
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    return () => window.removeEventListener("resize", checkDevice);
+  }, []);
+
+  const slideData = isMobile ? mobileFilms : desktopBanners;
 
   return (
-    <section className="relative h-screen overflow-hidden">
+    <section className="relative h-[100vh] md:h-[60vh] lg:h-[70vh] xl:h-[65vh] overflow-hidden">
       {/* Background Slider */}
       <Swiper
         modules={[Autoplay, EffectFade, Pagination]}
@@ -409,21 +434,21 @@ const HeroSection = ({ films = [] }) => {
         onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
         className="absolute inset-0 w-full h-full"
       >
-        {featuredFilms.map((film, index) => (
-          <SwiperSlide key={film.id}>
+        {slideData.map((slide, index) => (
+          <SwiperSlide key={slide.id}>
             <div className="relative h-full w-full">
               <img
-                src={film.bgImage}
-                alt={film.title}
-                className="absolute inset-0 w-full h-full object-cover transform scale-105"
-                style={{ filter: "brightness(0.7)" }}
+                src={slide.bgImage}
+                alt={slide.title}
+                className="absolute inset-0 w-full h-full object-cover object-center"
+                style={{ filter: "brightness(0.5)" }}
                 onError={(e) => {
                   e.target.src =
                     "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3";
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
             </div>
           </SwiperSlide>
         ))}
@@ -431,9 +456,8 @@ const HeroSection = ({ films = [] }) => {
 
       {/* Content Overlay */}
       <div className="relative h-full z-10 flex items-center">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
@@ -447,75 +471,79 @@ const HeroSection = ({ films = [] }) => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="flex items-center gap-3 mb-4"
+                  className="flex items-center gap-3 mb-3"
                 >
                   <span className="bg-yellow-400 text-black px-3 py-1 text-sm font-bold rounded-full">
-                    {featuredFilms[currentSlide].releaseDate}
+                    {slideData[currentSlide].releaseDate}
                   </span>
                   <div className="flex items-center gap-1">
                     <StarIcon className="h-5 w-5 text-yellow-400 fill-current" />
                     <span className="font-semibold">
-                      {featuredFilms[currentSlide].rating}
+                      {slideData[currentSlide].rating}
                     </span>
                   </div>
                 </motion.div>
 
                 <motion.h1
-                  className="text-5xl lg:text-7xl font-bold mb-4 leading-tight"
+                  className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 leading-tight"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.8 }}
                 >
-                  {featuredFilms[currentSlide].title}
+                  {slideData[currentSlide].title}
                 </motion.h1>
 
                 <motion.p
-                  className="text-xl text-gray-300 mb-3"
+                  className="text-base md:text-lg lg:text-xl text-gray-300 mb-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  {featuredFilms[currentSlide].subtitle}
+                  {slideData[currentSlide].subtitle}
                 </motion.p>
 
                 <motion.div
-                  className="flex items-center gap-2 mb-6"
+                  className="flex items-center gap-2 mb-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
                 >
                   <span className="text-sky-400 font-medium">
-                    {featuredFilms[currentSlide].genre}
+                    {slideData[currentSlide].genre}
                   </span>
                   <span className="text-gray-400">•</span>
-                  <span className="text-gray-300">2024</span>
+                  <span className="text-gray-300">Premium Quality</span>
                 </motion.div>
 
                 <motion.p
-                  className="text-gray-300 text-lg mb-8 max-w-lg leading-relaxed"
+                  className="text-gray-300 text-sm md:text-base lg:text-lg mb-6 max-w-lg leading-relaxed"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
                 >
-                  {featuredFilms[currentSlide].description}
+                  {slideData[currentSlide].description}
                 </motion.p>
 
                 <motion.div
-                  className="flex flex-col sm:flex-row gap-4"
+                  className="flex flex-col sm:flex-row gap-3"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
                 >
                   <Link
-                    to={`/films/${
-                      featuredFilms[currentSlide].slug ||
-                      featuredFilms[currentSlide].id
-                    }`} // ✅ Correct reference
-                    className="group relative bg-gradient-to-r from-sky-500 to-blue-600 text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all hover:shadow-2xl hover:shadow-sky-500/25 overflow-hidden"
+                    to={
+                      isMobile
+                        ? `/films/${
+                            slideData[currentSlide].slug ||
+                            slideData[currentSlide].id
+                          }`
+                        : "/films"
+                    }
+                    className="group relative bg-gradient-to-r from-sky-500 to-blue-600 text-white px-6 py-3 md:px-8 md:py-4 rounded-2xl text-sm md:text-base lg:text-lg font-semibold transition-all hover:shadow-2xl hover:shadow-sky-500/25 overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center justify-center">
-                      <TicketIcon className="h-6 w-6 mr-3" />
-                      Beli Tiket Sekarang
+                      <TicketIcon className="h-5 w-5 md:h-6 md:w-6 mr-2" />
+                      {isMobile ? "Beli Tiket Sekarang" : "Jelajahi Film"}
                     </span>
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600"
@@ -528,20 +556,21 @@ const HeroSection = ({ films = [] }) => {
                   <button
                     onClick={() =>
                       window.open(
-                        `https://www.youtube.com/results?search_query=${featuredFilms[currentSlide].title}+trailer`,
+                        isMobile
+                          ? `https://www.youtube.com/results?search_query=${slideData[currentSlide].title}+trailer`
+                          : "https://www.youtube.com/results?search_query=cinema+trailer",
                         "_blank"
                       )
                     }
-                    className="group border-2 border-white text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all hover:bg-white hover:text-gray-900 flex items-center justify-center"
+                    className="group border-2 border-white text-white px-6 py-3 md:px-8 md:py-4 rounded-2xl text-sm md:text-base lg:text-lg font-semibold transition-all hover:bg-white hover:text-gray-900 flex items-center justify-center"
                   >
-                    <PlayIcon className="h-6 w-6 mr-3" />
-                    Tonton Trailer
+                    <PlayIcon className="h-5 w-5 md:h-6 md:w-6 mr-2" />
+                    {isMobile ? "Tonton Trailer" : "Lihat Preview"}
                   </button>
                 </motion.div>
               </motion.div>
             </AnimatePresence>
 
-            {/* Right Content - Movie Poster & Info */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -550,15 +579,15 @@ const HeroSection = ({ films = [] }) => {
             >
               <div className="relative">
                 <motion.div
-                  className="w-80 h-96 bg-gradient-to-br from-sky-400 to-blue-600 rounded-3xl p-1 shadow-2xl"
+                  className="w-48 h-64 lg:w-56 lg:h-72 xl:w-64 xl:h-80 bg-gradient-to-br from-sky-400 to-blue-600 rounded-3xl p-1 shadow-2xl"
                   whileHover={{ y: -10, rotateY: 5 }}
                   transition={{ duration: 0.3 }}
                 >
                   <div className="w-full h-full bg-gray-800 rounded-3xl overflow-hidden">
                     <img
-                      src={featuredFilms[currentSlide].bgImage}
-                      alt={featuredFilms[currentSlide].title}
-                      className="w-full h-full object-cover"
+                      src={slideData[currentSlide].bgImage}
+                      alt={slideData[currentSlide].title}
+                      className="w-full h-full object-cover object-center"
                       onError={(e) => {
                         e.target.src =
                           "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3";
@@ -567,21 +596,20 @@ const HeroSection = ({ films = [] }) => {
                   </div>
                 </motion.div>
 
-                {/* Floating Action Buttons */}
-                <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 space-y-4">
+                <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 space-y-3">
                   <motion.button
-                    className="bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all"
+                    className="bg-white text-gray-800 p-2 lg:p-3 rounded-full shadow-lg hover:shadow-xl transition-all"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <HeartIcon className="h-6 w-6" />
+                    <HeartIcon className="h-5 w-5 lg:h-6 lg:w-6" />
                   </motion.button>
                   <motion.button
-                    className="bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all"
+                    className="bg-white text-gray-800 p-2 lg:p-3 rounded-full shadow-lg hover:shadow-xl transition-all"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <ShareIcon className="h-6 w-6" />
+                    <ShareIcon className="h-5 w-5 lg:h-6 lg:w-6" />
                   </motion.button>
                 </div>
               </div>
@@ -590,35 +618,46 @@ const HeroSection = ({ films = [] }) => {
         </div>
       </div>
 
-      {/* Bottom Stats */}
       <motion.div
-        className="absolute bottom-8 left-0 right-0 z-20"
+        className="absolute bottom-3 md:bottom-4 lg:bottom-6 left-0 right-0 z-20"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.8 }}
       >
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-3 gap-3 md:gap-6 max-w-xl lg:max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-4 mb-2">
-                <BuildingOfficeIcon className="h-8 w-8 text-white mx-auto" />
+              <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl lg:rounded-2xl p-2 md:p-3 lg:p-4 mb-1 md:mb-2">
+                <BuildingOfficeIcon className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-white mx-auto" />
               </div>
-              <div className="text-3xl font-bold text-white">150+</div>
-              <div className="text-sm text-gray-300">Lokasi Bioskop</div>
+              <div className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white">
+                150+
+              </div>
+              <div className="text-xs md:text-sm text-gray-300">
+                Lokasi Bioskop
+              </div>
             </div>
             <div className="text-center">
-              <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-4 mb-2">
-                <TicketIcon className="h-8 w-8 text-white mx-auto" />
+              <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl lg:rounded-2xl p-2 md:p-3 lg:p-4 mb-1 md:mb-2">
+                <TicketIcon className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-white mx-auto" />
               </div>
-              <div className="text-3xl font-bold text-white">500K+</div>
-              <div className="text-sm text-gray-300">Tiket Terjual</div>
+              <div className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white">
+                500K+
+              </div>
+              <div className="text-xs md:text-sm text-gray-300">
+                Tiket Terjual
+              </div>
             </div>
             <div className="text-center">
-              <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-4 mb-2">
-                <FilmIcon className="h-8 w-8 text-white mx-auto" />
+              <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl lg:rounded-2xl p-2 md:p-3 lg:p-4 mb-1 md:mb-2">
+                <FilmIcon className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-white mx-auto" />
               </div>
-              <div className="text-3xl font-bold text-white">50+</div>
-              <div className="text-sm text-gray-300">Film Terbaru</div>
+              <div className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white">
+                50+
+              </div>
+              <div className="text-xs md:text-sm text-gray-300">
+                Film Terbaru
+              </div>
             </div>
           </div>
         </div>
@@ -713,7 +752,7 @@ const QuickNavSection = () => {
   );
 };
 
-// Enhanced Movie Card Component
+// Enhanced Movie Card Component dengan fitur lengkap untuk slider
 const MovieCard = ({ film, index, featured = false }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -725,11 +764,10 @@ const MovieCard = ({ film, index, featured = false }) => {
   return (
     <motion.div
       ref={ref}
-      className="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500"
+      className="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full"
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileHover={{ y: -10 }}
     >
       {/* Poster Image - Fixed aspect ratio */}
       <div className="relative aspect-[2/3] overflow-hidden">
@@ -753,7 +791,11 @@ const MovieCard = ({ film, index, featured = false }) => {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setIsLiked(!isLiked)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsLiked(!isLiked);
+                }}
                 className={`p-3 rounded-full backdrop-blur-md transition-colors ${
                   isLiked
                     ? "bg-red-500 text-white"
@@ -768,7 +810,11 @@ const MovieCard = ({ film, index, featured = false }) => {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setShowDetails(true)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowDetails(true);
+                }}
                 className="p-3 rounded-full bg-white bg-opacity-20 backdrop-blur-md text-white"
               >
                 <EyeIcon className="h-5 w-5" />
@@ -778,6 +824,7 @@ const MovieCard = ({ film, index, featured = false }) => {
                 to={`/films/${
                   film?.slug || film?.judul?.toLowerCase().replace(/\s+/g, "-")
                 }`}
+                onClick={(e) => e.stopPropagation()}
                 className="flex-1 bg-gradient-to-r from-sky-500 to-blue-600 text-white py-3 rounded-full text-center font-semibold backdrop-blur-md hover:from-sky-600 hover:to-blue-700 transition-all"
               >
                 Beli Tiket
@@ -808,8 +855,8 @@ const MovieCard = ({ film, index, featured = false }) => {
         </div>
       </div>
 
-      {/* Content - Fixed height for consistency */}
-      <div className="p-6 h-50 flex flex-col justify-between">
+      {/* Content - Fixed height untuk konsistensi dalam slider */}
+      <div className="p-6 h-48 flex flex-col justify-between">
         <div>
           <h3 className="font-bold text-xl text-gray-900 mb-2 line-clamp-2 group-hover:text-sky-600 transition-colors min-h-[3.5rem]">
             {film?.judul || "Untitled Movie"}
@@ -836,11 +883,12 @@ const MovieCard = ({ film, index, featured = false }) => {
         </Link>
       </div>
 
-      {/* Detail Modal */}
+      {/* Film Details Modal - Mempertahankan fitur yang ada */}
       <AnimatePresence>
         {showDetails && (
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4"
+            style={{ zIndex: 9999 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -851,7 +899,13 @@ const MovieCard = ({ film, index, featured = false }) => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
+              style={{
+                transform: "none",
+                position: "relative",
+                zIndex: 10000,
+              }}
             >
               <div className="relative h-64">
                 <img
@@ -861,17 +915,27 @@ const MovieCard = ({ film, index, featured = false }) => {
                   }
                   alt={film?.judul}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.src =
+                      "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3";
+                  }}
                 />
                 <button
                   className="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-colors"
-                  onClick={() => setShowDetails(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowDetails(false);
+                  }}
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>
               </div>
 
               <div className="p-8">
-                <h2 className="text-3xl font-bold mb-4">{film?.judul}</h2>
+                <h2 className="text-3xl font-bold mb-4">
+                  {film?.judul || "Untitled Movie"}
+                </h2>
 
                 <div className="flex items-center gap-6 mb-6">
                   <div className="flex items-center gap-2">
@@ -895,19 +959,25 @@ const MovieCard = ({ film, index, featured = false }) => {
 
                 <div className="flex gap-4">
                   <Link
-                    to={`/films/${film?.slug || film?.id}`} // Gunakan slug terlebih dahulu
+                    to={`/films/${film?.slug || film?.id}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowDetails(false);
+                    }}
                     className="flex-1 bg-gradient-to-r from-sky-500 to-blue-600 text-white text-center py-4 rounded-2xl font-semibold hover:from-sky-600 hover:to-blue-700 transition-all"
                   >
                     Beli Tiket Sekarang
                   </Link>
                   <button
                     className="bg-gray-200 text-gray-800 px-6 py-4 rounded-2xl font-semibold hover:bg-gray-300 transition-colors"
-                    onClick={() =>
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
                       window.open(
                         `https://www.youtube.com/results?search_query=${film?.judul}+trailer`,
                         "_blank"
-                      )
-                    }
+                      );
+                    }}
                   >
                     Trailer
                   </button>
@@ -921,7 +991,7 @@ const MovieCard = ({ film, index, featured = false }) => {
   );
 };
 
-// Main Home Component - Update to match AdminFilms pattern
+// Main Home Component
 const Home = () => {
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -929,13 +999,16 @@ const Home = () => {
   const [pagination, setPagination] = useState(null);
   const [showBanner, setShowBanner] = useState(true);
 
-  // Fetch films using the same pattern as AdminFilms.js
+  // Navigation refs untuk slider
+  const [prevEl, setPrevEl] = useState(null);
+  const [nextEl, setNextEl] = useState(null);
+
   const fetchFilms = useCallback(async () => {
     setLoading(true);
     setError("");
 
     try {
-      const response = await filmService.getAllFilms(); // Use getAllFilms like in AdminFilms
+      const response = await filmService.getAllFilms();
 
       let filmsData = [];
       let paginationData = null;
@@ -982,9 +1055,9 @@ const Home = () => {
 
   // Skeleton loader
   const MovieCardSkeleton = () => (
-    <div className="animate-pulse bg-white rounded-3xl overflow-hidden shadow-lg">
+    <div className="animate-pulse bg-white rounded-3xl overflow-hidden shadow-lg h-[520px]">
       <div className="aspect-[2/3] bg-gray-300"></div>
-      <div className="p-6 h-40">
+      <div className="p-6 h-48">
         <div className="h-6 bg-gray-300 rounded mb-2"></div>
         <div className="h-4 bg-gray-200 rounded mb-4"></div>
         <div className="h-10 bg-gray-300 rounded"></div>
@@ -994,12 +1067,12 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      {/* Top Banner - Sticky */}
+      {/* Top Banner */}
       <AnimatePresence>
         {showBanner && <TopBanner onClose={() => setShowBanner(false)} />}
       </AnimatePresence>
 
-      {/* Hero Section - Pass films data to hero */}
+      {/* Hero Section */}
       <div className={`${showBanner ? "" : ""}`}>
         <HeroSection films={films} />
       </div>
@@ -1007,23 +1080,47 @@ const Home = () => {
       {/* Quick Navigation */}
       <QuickNavSection />
 
-      {/* Featured & Now Showing Films */}
+      {/* Film Slider Section - SIMPLE HORIZONTAL SLIDER */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Sedang Tayang
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Jangan lewatkan film-film terbaru yang sedang trending di bioskop
-            </p>
-          </motion.div>
+          {/* Header dengan Navigation Controls */}
+          <div className="flex items-center justify-between mb-12">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-4xl font-bold text-gray-900 mb-2">
+                Film Sedang Tayang
+              </h2>
+              <p className="text-xl text-gray-600">
+                Jangan lewatkan film-film terbaru yang sedang trending
+              </p>
+            </motion.div>
 
+            {/* Custom Navigation Buttons */}
+            <div className="flex gap-3">
+              <motion.button
+                ref={(node) => setPrevEl(node)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-full hover:from-sky-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl"
+              >
+                <ChevronLeftIcon className="h-6 w-6" />
+              </motion.button>
+
+              <motion.button
+                ref={(node) => setNextEl(node)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-full hover:from-sky-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl"
+              >
+                <ChevronRightIcon className="h-6 w-6" />
+              </motion.button>
+            </div>
+          </div>
+
+          {/* Film Slider */}
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
               {[...Array(10)].map((_, index) => (
@@ -1065,15 +1162,55 @@ const Home = () => {
               </p>
             </motion.div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-              {films.slice(0, 15).map((film, index) => (
-                <MovieCard
-                  key={film?.id || `film-${index}`}
-                  film={film}
-                  index={index}
-                />
-              ))}
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              {/* Simple Horizontal Slider dengan Swiper */}
+              <Swiper
+                modules={[Navigation, Pagination]}
+                spaceBetween={24}
+                slidesPerView={1}
+                navigation={{
+                  prevEl,
+                  nextEl,
+                }}
+                pagination={{
+                  clickable: true,
+                  bulletClass:
+                    "swiper-pagination-bullet !bg-sky-500 !opacity-40",
+                  bulletActiveClass:
+                    "swiper-pagination-bullet-active !bg-sky-600 !opacity-100",
+                }}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                  },
+                  768: {
+                    slidesPerView: 3,
+                    spaceBetween: 24,
+                  },
+                  1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 24,
+                  },
+                  1280: {
+                    slidesPerView: 5,
+                    spaceBetween: 24,
+                  },
+                }}
+                className="!pb-12"
+              >
+                {films.slice(0, 15).map((film, index) => (
+                  <SwiperSlide key={film?.id || `film-${index}`}>
+                    <MovieCard film={film} index={index} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </motion.div>
           )}
 
           {/* View All Button */}

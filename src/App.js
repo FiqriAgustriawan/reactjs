@@ -14,9 +14,6 @@ const Login = lazy(() => import("./pages/auth/Login"));
 const Register = lazy(() => import("./pages/auth/Register"));
 const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
-const FilmDetail = lazy(() => import("./pages/films/FilmDetail"));
-const Bookings = lazy(() => import("./pages/bookings/Bookings"));
-const Profile = lazy(() => import("./pages/Profile"));
 
 // Admin pages with lazy loading
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
@@ -24,11 +21,6 @@ const AdminFilms = lazy(() => import("./pages/admin/AdminFilms"));
 const AdminBookings = lazy(() => import("./pages/admin/AdminBookings"));
 const AdminUsers = lazy(() => import("./pages/admin/AdminUsers"));
 
-// Import halaman baru
-const AllFilms = lazy(() => import("./pages/films/AllFilms"));
-const NowPlaying = lazy(() => import("./pages/films/NowPlaying"));
-const ComingSoon = lazy(() => import("./pages/films/ComingSoon"));
-const Promos = lazy(() => import("./pages/promotions/Promos"));
 
 // Memoized Loading Component
 const PageLoader = React.memo(() => (
@@ -157,89 +149,8 @@ function App() {
                   }
                 />
 
-                {/* Public Routes with Layout */}
-                <Route
-                  path="/"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <LayoutWrapper>
-                        <Home />
-                      </LayoutWrapper>
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="/films/:slug"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <LayoutWrapper>
-                        <FilmDetail />
-                      </LayoutWrapper>
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="/films"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <LayoutWrapper>
-                        <AllFilms />
-                      </LayoutWrapper>
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="/now-playing"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <LayoutWrapper>
-                        <NowPlaying />
-                      </LayoutWrapper>
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="/coming-soon"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <LayoutWrapper>
-                        <ComingSoon />
-                      </LayoutWrapper>
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="/promo"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <LayoutWrapper>
-                        <Promos />
-                      </LayoutWrapper>
-                    </Suspense>
-                  }
-                />
 
-                {/* Protected User Routes */}
-                <Route
-                  path="/bookings"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <ProtectedLayoutRoute>
-                        <Bookings />
-                      </ProtectedLayoutRoute>
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <ProtectedLayoutRoute>
-                        <Profile />
-                      </ProtectedLayoutRoute>
-                    </Suspense>
-                  }
-                />
+               
 
                 {/* Admin Routes */}
                 <Route

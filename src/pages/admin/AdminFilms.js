@@ -139,20 +139,16 @@ const AdminFilms = () => {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              Films Management
+              Data Materi
             </h1>
-            {pagination && (
-              <p className="text-sm text-gray-500 mt-1">
-                Total: {pagination.total} films
-              </p>
-            )}
+            
           </div>
           <button
             onClick={handleAddFilm}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
           >
             <PlusIcon className="h-4 w-4 mr-2" />
-            Add Film
+            Buat baru
           </button>
         </div>
 
@@ -180,7 +176,7 @@ const AdminFilms = () => {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             {films.length === 0 ? (
               <div className="p-8 text-center">
-                <p className="text-gray-500">No films found</p>
+                <p className="text-gray-500">tidak ada materi</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
